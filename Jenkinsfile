@@ -32,6 +32,16 @@ pipeline {
                 }
             }
         }
+        stage ('Deploy') {
+            steps {
+                script {
+                    def dockerCmd = 'docker run  -p 3000:3000 -d truonglk/sample-react-app:latest'
+                    sshagent(['ec2-server-key']) {
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@3.92.144.96 ${dockerCmd}"
+                    }
+                }
+            }
+        }
         
     }
 }
